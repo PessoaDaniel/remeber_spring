@@ -1,10 +1,11 @@
 package site.dancodes.remeber_spring.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import site.dancodes.remeber_spring.models.security.AccessProfile;
 
-@Entity(name = "user")
-public class User  extends BaseEntity {
+@Entity()
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class User  extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -24,10 +25,9 @@ public class User  extends BaseEntity {
     @Column(name = "locked")
     protected boolean locked;
 
-    public User () {
-        this.banned = false;
-        this.locked = false;
-    }
+    @ManyToOne
+    protected AccessProfile accessProfile;
+
 
     public String getName() {
         return name;
@@ -75,5 +75,13 @@ public class User  extends BaseEntity {
 
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    public AccessProfile getAccessProfile() {
+        return accessProfile;
+    }
+
+    public void setAccessProfile(AccessProfile accessProfile) {
+        this.accessProfile = accessProfile;
     }
 }
